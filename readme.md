@@ -48,7 +48,7 @@
 
 <br>
 
-Following traditional face synthesis models like StyleGAN, we can perform interpolation between any two latent codes.
+Following the traditional face synthesis models like StyleGAN, we can perform interpolation between any two latent codes.
 
 | ![fake_a_128_front_1.gif](https://img1.imgtp.com/2023/10/06/z5Aqa25s.gif) | ![fake_a_128_front_3.gif](https://img1.imgtp.com/2023/10/06/aRzPYIhP.gif) | ![fake_a_128_front_4.gif](https://img1.imgtp.com/2023/10/06/UHVAcvQL.gif) | ![fake_a_128_yaw_only_4.gif](https://img1.imgtp.com/2023/10/06/mfMmSxm0.gif) | ![fake_b1_128_front_3.gif](https://img1.imgtp.com/2023/10/06/Pivq6fDH.gif) |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
