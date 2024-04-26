@@ -11,7 +11,7 @@
 # Training
 -  The model is trained by conducting a two-stage training strategy: pretraining on CelebA and fine-tuning on both AAHQ and CelebA.
 -  The whole model is composed of 1 generator and 3 dicriminators. `disc_real` guides the `gen` to generate natural human faces and `disc_style` guides the `gen` to generate stylized human faces. `disc_latent` helps ensure the style-consistency between generated faces and ref faces.
--  We use a weight blending module to help smoothening the cross-domain transfer learning process and allow users to change the extent to which the generated images is stylized(level can be changed from 0 to 11).
+-  We use a style blending module to help stabilize the cross-domain transfer learning process and allow users to change the extent to which the generated images is stylized(level can be changed from 0 to 11).
 
 # Examples
 
