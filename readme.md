@@ -5,7 +5,7 @@
 - Others: Python3.7 + PyTorch1.8.1 + CUDA10.1
 
 # Preparation
-- To prepare data and pretraind models, please check all the file folders in this project and follow the guidance in `readme.md`.
+- To prepare data and pretraind models, please check all the file folders in this project and follow the guidance in each `readme.md`.
 - To accelerate the training process, we precompute the 512-dim style code for every artistic human face, you can download [style_codes.csv](https://drive.google.com/file/d/1Y-ZCIDe_uYC4YealGT-jw1iZw66-EZj9/view?usp=sharing) and place it under `ArtNerf/`.
 
 # Training
