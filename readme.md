@@ -13,6 +13,7 @@
 ## Pretrained models
 - Download and unzip the [file](https://drive.google.com/file/d/1PZ-OxxAotbyD-4dnONN54sTJW9kvPxwW/view?usp=sharing) and put `style_encoder.pt` under `ckpt/`
 - Download and unzip the [file](https://drive.google.com/drive/folders/1LA0Lowx3l5_nUIRwqSOqzHDS4XYkRHeR?usp=sharing). Place all the related file folders (`artnerf_models`, `base_models`) under `experiments/`
+- Place `vgg19-dcbb9e9d.pth` (which can be downloaded from PyTorch official website) in this directory.
 - To accelerate the training process, we precompute the 512-dim style code for every artistic human face, you can download [style_codes.csv](https://drive.google.com/file/d/1Y-ZCIDe_uYC4YealGT-jw1iZw66-EZj9/view?usp=sharing) and place it under `ArtNerf/`.
 
 # Training
