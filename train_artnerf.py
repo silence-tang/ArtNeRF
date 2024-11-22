@@ -563,7 +563,7 @@ if __name__ == '__main__':
     parser.add_argument("--n_epochs", type=int, default=1000, help="number of epochs of training")
     parser.add_argument('--set_step', type=int, default=None, help="set the step of current training")
     parser.add_argument('--load_dir', type=str, default='experiments/base_models', help="directory of generator.pth")
-    parser.add_argument('--curriculum', type=str, required=True, default='face2anime', help="config file")
+    parser.add_argument('--curriculum', type=str, default='facestylization', help="config file")
     parser.add_argument('--output_dir', type=str, default='results', help="where to place outputs")
     parser.add_argument("--sample_interval", type=int, default=2000, help="interval between validating the model")
     parser.add_argument('--model_save_interval', type=int, default=6000, help="interval between saving trained models")
