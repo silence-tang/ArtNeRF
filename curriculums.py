@@ -36,7 +36,7 @@ def extract_metadata(curriculum, current_step):
     return return_dict
 
 
-face2anime = {
+facestylization = {
     # 学习率视情况而定,一般batch_size越大, lr需成比例增大
     # train with a small dataset might require more epochs than large datasets.
     # If you're looking for good shapes, e.g. for CelebA, try increasing num_steps and moving the back plane (ray_end) to allow the model to move the background back and capture the full head.
@@ -48,7 +48,7 @@ face2anime = {
     int(500000): {},
     'dataset_pigan': 'CelebA',
     'dataset_aahq': 'AAHQ',
-    'dataset_artnerf': 'face2anime_artnerf',
+    'dataset_artnerf': 'FaceStylization',
     'refer_dataset': 'referFace',
     'dataset1': 'realFace',
     'dataset2': 'aniFace',
@@ -87,7 +87,7 @@ face2anime = {
     'discriminator_real': 'CCSEncoderDiscriminator_artnerf',
     'discriminator_style': 'CCSEncoderDiscriminator_artnerf',
     'discriminator_latent': 'ProjectionDiscriminator',
-    'neural_renderer': 'NeuralRenderer1',
+    'neural_renderer': 'NeuralRenderer',
     'is_dual_disc': False,
     'perc_backbone': 'vgg19',
     'clamp_mode': 'relu',

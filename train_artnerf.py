@@ -190,7 +190,7 @@ def train(rank, world_size, opt):
         
     # torch.manual_seed(rank)
 
-    dataloader1 = None
+    dataloader = None
     total_progress_bar = tqdm(total = opt.n_epochs, desc = "Total progress", dynamic_ncols=True)
     total_progress_bar.update(cur_epoch)
     interior_step_bar = tqdm(dynamic_ncols=True)
@@ -205,18 +205,18 @@ def train(rank, world_size, opt):
         total_progress_bar.update(1)
         metadata = curriculums.extract_metadata(curriculum, cur_step)
 
-        if not dataloader1 or dataloader1.batch_size != metadata['batch_size']:
-            dataloader1 = datasets.get_dataset(metadata['dataset_artnerf'], **metadata)
+        if not dataloader or dataloader.batch_size != metadata['batch_size']:
+            dataloader = datasets.get_dataset(metadata['dataset_artnerf'], **metadata)
             step_next_upsample = curriculums.next_upsample_step(curriculum, cur_step)
             step_last_upsample = curriculums.last_upsample_step(curriculum, cur_step)
             interior_step_bar.reset(total=(step_next_upsample - step_last_upsample))
             interior_step_bar.set_description(f"Progress to next stage")
             interior_step_bar.update((cur_step - step_last_upsample))
 
-        for i, (x_a, x_b_128, z_b) in enumerate(dataloader1):
+        for i, (x_a, x_b_128, z_b) in enumerate(dataloader):
             metadata = curriculums.extract_metadata(curriculum, cur_step)
             
-            if dataloader1.batch_size != metadata['batch_size']:
+            if dataloader.batch_size != metadata['batch_size']:
                 break
 
             if scaler.get_scale() < 1:
@@ -563,7 +563,7 @@ if __name__ == '__main__':
     parser.add_argument("--n_epochs", type=int, default=1000, help="number of epochs of training")
     parser.add_argument('--set_step', type=int, default=None, help="set the step of current training")
     parser.add_argument('--load_dir', type=str, default='experiments/base_models', help="directory of generator.pth")
-    parser.add_argument('--curriculum', type=str, required=True, help="config file")
+    parser.add_argument('--curriculum', type=str, required=True, default='face2anime', help="config file")
     parser.add_argument('--output_dir', type=str, default='results', help="where to place outputs")
     parser.add_argument("--sample_interval", type=int, default=2000, help="interval between validating the model")
     parser.add_argument('--model_save_interval', type=int, default=6000, help="interval between saving trained models")

@@ -42,7 +42,7 @@ class AAHQ(Dataset):
         return len(self.style_face)
 
 
-class face2anime_artnerf(Dataset):
+class FaceStylization(Dataset):
     def __init__(self, dataset_path1, dataset_path2, dataset_path3, img_size_sr, **kwargs): 
         super().__init__()
         self.transform1 = transforms.Compose([transforms.Resize(320), transforms.CenterCrop(256), transforms.ToTensor(), transforms.Normalize([0.5], [0.5]), transforms.RandomHorizontalFlip(p=0.5), transforms.Resize((img_size_sr, img_size_sr))])
@@ -67,7 +67,7 @@ class face2anime_artnerf(Dataset):
         return len(self.real_face)
 
 
-class styleFace(Dataset):
+class StyleFace(Dataset):
     def __init__(self, dataset_path, img_size): 
         super().__init__()
         self.transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize([0.5], [0.5]), transforms.Resize((img_size, img_size))])
@@ -82,7 +82,7 @@ class styleFace(Dataset):
     def __len__(self):
         return len(self.styleface)
 
-class realFace(Dataset):
+class RealFace(Dataset):
     def __init__(self, dataset_path, img_size, mode, **kwargs): 
         super().__init__()
         # 验证集图像无需翻转
@@ -103,7 +103,7 @@ class realFace(Dataset):
     def __len__(self):
         return len(self.realface)
 
-class aniFace(Dataset):
+class AniFace(Dataset):
     def __init__(self, dataset_path, img_size, mode, **kwargs): 
         super().__init__()
         # 验证集图像无需翻转
