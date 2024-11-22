@@ -99,24 +99,24 @@ def train(rank, world_size, opt):
 
     # 实例化SIREN模型
     FiLM = getattr(film_artnerf, metadata['model'])
+    # 实例化NR模型
+    NeuralRenderer = getattr(film_artnerf, metadata['neural_renderer'])
+
     # 缩短训练时间、降低存储需求
     scaler = torch.cuda.amp.GradScaler()
     
     # 加载模型
     if opt.load_dir != '':
         generator = torch.load(os.path.join(opt.load_dir, '00_300000_generator.pth'), map_location=device)
-        # generator.siren.wbm.w.data = (torch.ones(9 + 2, 1) * 0.7).to(device)
         generator.siren.wbm.w.requires_grad = True
         discriminator_real = torch.load(os.path.join(opt.load_dir, '00_300000_discriminator_real.pth'), map_location=device)
-        # discriminator_style = torch.load(os.path.join(opt.load_dir, 'discriminator_style.pth'), map_location=device)
-        # discriminator_latent = torch.load(os.path.join(opt.load_dir, 'discriminator_latent.pth'), map_location=device)
         discriminator_style = getattr(discriminators, metadata['discriminator_style'])().to(device)
-        discriminator_latent = getattr(discriminators, metadata['discriminator_latent'])().to(device)
+        discriminator_latent = getattr(discriminators, metadata['discriminator_latent'])(metadata['style_dim']).to(device)
         ema = ExponentialMovingAverage(generator.parameters(), decay=0.999)
-        # 若是加载预训练模型, 这里需要注释掉(因为只需要模型参数, 不需要状态参数), 若是继续训练预训练模型, 这里无需注释
+        # 若是加载预训练模型, 这里需要注释掉(因为只需要模型参数, 不需要状态参数), 若是继续训练某一阶段的checkpoint, 这里无需注释
         # ema.load_state_dict(torch.load(os.path.join(opt.load_dir, "ema.pth"), map_location=device))
     else:
-        generator = getattr(generators_artnerf, metadata['generator'])(FiLM, metadata['z_dim'], metadata['hidden_dim']).to(device)
+        generator = getattr(generators_artnerf, metadata['generator'])(FiLM, NeuralRenderer, metadata['img_size'], metadata['z_dim'], metadata['style_dim'], metadata['f_dim'], metadata['hidden_dim']).to(device)
         discriminator_real = getattr(discriminators, metadata['discriminator_real'])().to(device)
         discriminator_style = getattr(discriminators, metadata['discriminator_style'])().to(device)
         discriminator_latent = getattr(discriminators, metadata['discriminator_latent'])().to(device)
@@ -150,7 +150,7 @@ def train(rank, world_size, opt):
                                     {'params': list(discriminator_latent_ddp.parameters()), 'name': 'discriminator_latent', 'lr': metadata['dis_latent_lr']}],
                                     lr=metadata['dis_real_lr'], betas=metadata['betas'], weight_decay=metadata['weight_decay'])
 
-    # 若是加载预训练模型, 这里需要注释掉, 若是继续训练模型, 这里无需注释掉
+    # 若是继续训练某一阶段的checkpoint, 这里无需注释
     # if opt.load_dir != '':
     #     optimizer_G.load_state_dict(torch.load(os.path.join(opt.load_dir, 'optimizer_G.pth')))
     #     optimizer_D.load_state_dict(torch.load(os.path.join(opt.load_dir, 'optimizer_D.pth')))
@@ -170,7 +170,7 @@ def train(rank, world_size, opt):
 
     generator_ddp.module.set_device(device)
 
-    # ----------------------------------------------------------------------------
+    # -------------------------------------------------------------------------------------------------
     #  Training
     # logging.basicConfig(filename=os.path.join(opt.output_dir, 'logs.txt'), level=logging.DEBUG)
     writer = SummaryWriter(os.path.join(opt.output_dir, 'tb_logs_' + str(datetime.now())[5:10]))
@@ -552,7 +552,7 @@ def train(rank, world_size, opt):
                 torch.cuda.empty_cache()
 
             cur_step += 1  # 处理完一个batch, step+1
-        cur_epoch += 1  # 处理完一个epoch, epoch+1
+        cur_epoch += 1     # 处理完一个epoch, epoch+1
 
     writer.close()
     cleanup()
@@ -562,9 +562,9 @@ if __name__ == '__main__':
     parser.add_argument('--port', type=str, default='16666', help="different training process should use different ports")
     parser.add_argument("--n_epochs", type=int, default=1000, help="number of epochs of training")
     parser.add_argument('--set_step', type=int, default=None, help="set the step of current training")
-    parser.add_argument('--load_dir', type=str, default='', help="directory of generator.pth")
+    parser.add_argument('--load_dir', type=str, default='experiments/base_models', help="directory of generator.pth")
     parser.add_argument('--curriculum', type=str, required=True, help="config file")
-    parser.add_argument('--output_dir', type=str, default='out_dir', help="where to place outputs")
+    parser.add_argument('--output_dir', type=str, default='results', help="where to place outputs")
     parser.add_argument("--sample_interval", type=int, default=2000, help="interval between validating the model")
     parser.add_argument('--model_save_interval', type=int, default=6000, help="interval between saving trained models")
     parser.add_argument('--fid_interval', type=int, default=2000, help="interval between evaluating fid socre")
