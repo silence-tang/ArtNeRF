@@ -232,7 +232,7 @@ class CCSEncoderDiscriminator(nn.Module):
         return prediction, position, feat1.mean([2, 3]), feat2.mean([2, 3])
 
 
-class CCSEncoderDiscriminator_artnerf(nn.Module):
+class CCSEncoderDiscriminator_blendgan(nn.Module):
     def __init__(self, **kwargs):
         super().__init__()
         self.step = 0
