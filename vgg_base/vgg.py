@@ -6,7 +6,7 @@ class vgg19(nn.Module):
     def __init__(self):
         super().__init__()
         self.vgg_model = models.vgg19()
-        self.pretrained_file = torch.load('pretrained/vgg19-dcbb9e9d.pth')  # 需要设置正确的路径
+        self.pretrained_file = torch.load('/hoome/xxx/ArtNeRF-main/pretrained/vgg19-dcbb9e9d.pth')  # 需要设置正确的路径
         self.vgg_model.load_state_dict(self.pretrained_file)
         self.module_all = torch.nn.Sequential(*list(self.vgg_model.children()))
 
